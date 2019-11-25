@@ -200,57 +200,56 @@ router.post('/users/reset-password', (req, res) => {
     })
     var token = Date.now() + makeid(6);
     var tokens = new Token();
-    tokens.user = user;
+    tokens.user = user.email;
     tokens.token = token;
     tokens.save(function (err) {
       if (err) return res.json({ status: 'Lỗi', message: 'Kiểm tra lại' });
-      var transporter = nodemailer.createTransport({ // config mail server
-        service: 'Gmail',
-        auth: {
-          user: 'thanhntph06292@fpt.edu.vn',
-          pass: '0166225914433__ok__'
-        }
-      });
-      var mainOptions = { // thiết lập đối tượng, nội dung gửi mail
-        from: 'Thanh IT',
-        to: user.email,
-        subject: 'Event & Check - Đặt lại mật khẩu',
-        text:
-          'Bạn đang nhận được điều này bởi vì bạn (hoặc người khác) đã yêu cầu đặt lại mật khẩu cho tài khoản của bạn.\n\n' +
-          'Đây là đường dẫn xác nhận đặt lại mậu khẩu của bạn:\n\n' + '45.77.252.198/reset/' + token + '\n\n' +
-          'Nếu bạn không yêu cầu điều này, xin vui lòng bỏ qua email này và mật khẩu của bạn sẽ không thay đổi.\n\n' +
-          'Vui lòng bảo mật thông tin tài khoản của bạn.\n\n' +
-          '------------------------------\n\n' +
-          'Admin Event & Check\n\nHotline: 0943428321 (gặp Mr. Thành IT)\n\nAddress: FPT Polytechnic - Hà Nội'
-      }
-      transporter.sendMail(mainOptions, function (err, info) {
-        if (err) return res.json({ status: 'Lỗi', message: 'Lỗi rồi' })
-        res.json({ status: 'OK', message: 'Vui lòng kiểm tra email để lấy mật khẩu mới' })
-      });
     })
-
+    var transporter = nodemailer.createTransport({ // config mail server
+      service: 'Gmail',
+      auth: {
+        user: 'thanhntph06292@fpt.edu.vn',
+        pass: '0166225914433__ok__'
+      }
+    });
+    var mainOptions = { // thiết lập đối tượng, nội dung gửi mail
+      from: 'Thanh IT',
+      to: user.email,
+      subject: 'Event & Check - Đặt lại mật khẩu',
+      text:
+        'Bạn đang nhận được điều này bởi vì bạn (hoặc người khác) đã yêu cầu đặt lại mật khẩu cho tài khoản của bạn.\n\n' +
+        'Đây là đường dẫn xác nhận đặt lại mậu khẩu của bạn:\n\n' + '45.77.252.198/reset/' + token + '\n\n' +
+        'Nếu bạn không yêu cầu điều này, xin vui lòng bỏ qua email này và mật khẩu của bạn sẽ không thay đổi.\n\n' +
+        'Vui lòng bảo mật thông tin tài khoản của bạn.\n\n' +
+        '------------------------------\n\n' +
+        'Admin Event & Check\n\nHotline: 0943428321 (gặp Mr. Thành IT)\n\nAddress: FPT Polytechnic - Hà Nội'
+    }
+    transporter.sendMail(mainOptions, function (err, info) {
+      if (err) return res.json({ status: 'Lỗi', message: 'Lỗi rồi' })
+      res.json({ status: 'OK', message: 'Vui lòng kiểm tra email để lấy mật khẩu mới' })
+    });
   });
 });
 //Thay đỏi mật khẩu
-router.get('/reset/:cId', (req, res) => {
+router.get('/reset/:cId', async (req, res) => {
   var token = req.params.cId;
-  Token.findOne({ token: token }).exec(async (err, tokens) => {
-    if (err) return res.json({
-      status: 'Lỗi',
-      message: 'Đừng hack tài khoản người khác chứ'
-    })
-    await User.findOne({ _id: tokens.user }).exec(async (err, user) => {
-      if (err) return res.json({ status: '', message: 'Lỗi' });
-      var passwords = makeid(8);
-      user.password = passwords
-      await user.save(function (err) {
+  await Token.findOne({ token: token }).exec(async (err, tokens) => {
+    if (err) return res.json('Đừng hack tài khoản người khác chứ')
+    if (tokens == null) return res.json('Không tồn tại đường dẫn')
+    var email = tokens.user;
+    var passwords = makeid(8);
+    await User.findOne({ email: email }).select('_id email password phone').exec((err, users) => {
+      if (err) return res.json({ status: 'Lỗi', message: 'Lỗi' });
+      users.password = passwords;
+      users.save(function (err) {
         if (err) return res.json(err);
-        Token.deleteMany({ user: { $in: user._id } }, (err, res) => {
-          if (err) return res.json(err);
-        });
+        res.json('Thay đổi mật khẩu thành công. Mật khẩu của bạn mới là: ' + users.password + '. Vui lòng đăng nhập và cập nhật mới mật khẩu của bạn.')
       })
-      await res.render('Thay đổi mật khẩu thành công. Mật khẩu của bạn mới là: ' + passwords + '. Vui lòng đăng nhập và cập nhật mới mật khẩu của bạn.')
+      Token.deleteMany({ token: { $in: tokens.token } }, (err, test) => {
+        if (err) return res.json(err);
+      });
     })
+
   })
 })
 //Thông tin người dùng
