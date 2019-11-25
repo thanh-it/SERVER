@@ -1,0 +1,62 @@
+<div class="main-content">
+    <div class="sidebar" role="navigation">
+        <div class="navbar-collapse">
+            <nav class="cbp-spmenu cbp-spmenu-vertical cbp-spmenu-right dev-page-sidebar mCustomScrollbar _mCS_1 mCS-autoHide mCS_no_scrollbar"
+                id="cbp-spmenu-s1">
+                <div class="scrollbar scrollbar1">
+                    <ul class="nav" id="side-menu">
+                        <li>
+                            <a href="/"><i class="fa fa-home nav_icon"></i>Trang chủ</a>
+                        </li>
+                        <li>
+                            <a href="/creator"><i class="fa fa-pencil nav_icon"></i>Người tạo sự kiện</a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+        </div>
+    </div>
+    <div class="sticky-header header-section ">
+        <div class="header-left">
+            <div class="logo">
+                <a href="/">
+                    <h1>Event & Check</h1>
+                </a>
+            </div>
+            <div class="clearfix"> </div>
+        </div>
+    </div>
+    <div id="page-wrapper">
+        <div class="play-grid" style="height:600px; overflow-x:auto; ">
+            <h2 class="text-center"><b>DANH SÁCH ĐĂNG KÝ TẠO SỰ KIỆN</b></h2>
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>Tên</th>
+                        <th>Email</th>
+                        <th>Điện thoại</th>
+                        <th>QR code</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {{#each reg_creator}}
+                    <tr>
+                        <td>{{this.reg_by.name}}</td>
+                        <td>{{this.reg_by.email}}</td>
+                        <td>{{this.reg_by.phone}}</td>
+                        <td><img src="{{this.reg_by.qrcode}}" class="show_qr"></td>
+                        <td><a type="button" class="btn btn-success" href="/creator/comfirm/{{this._id}}">Xác nhận</a>
+                            <a type="button" class="btn btn-danger" href="/creator/cancel/{{this._id}}">Hủy</a>
+                        </td>
+                    </tr>
+                    {{/each}}
+                </tbody>
+            </table>
+        </div>
+        <div class="copy-section">
+            <p>&copy; 2019 Event - Check. Tạo và tham gia sự kiện đơn giản | Bản quyền của <a
+                    href="https://www.facebook.com/AdminThanhIT">StartUp 3N</a></p>
+        </div>
+    </div>
+</div>

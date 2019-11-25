@@ -1,0 +1,236 @@
+<div class="main-content">
+    <div class="sidebar" role="navigation">
+        <div class="navbar-collapse">
+            <nav class="cbp-spmenu cbp-spmenu-vertical cbp-spmenu-right dev-page-sidebar mCustomScrollbar _mCS_1 mCS-autoHide mCS_no_scrollbar"
+                id="cbp-spmenu-s1">
+                <div class="scrollbar scrollbar1">
+                    <ul class="nav" id="side-menu">
+                        <li>
+                            <a href="/"><i class="fa fa-home nav_icon"></i>Trang chủ</a>
+                        </li>
+                        <li>
+                            <a href="/creator"><i class="fa fa-pencil nav_icon"></i>Người tạo sự kiện</a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+        </div>
+    </div>
+    <div class="sticky-header header-section ">
+        <div class="header-left">
+            <div class="logo">
+                <a href="/">
+                    <h1>Event & Check</h1>
+                </a>
+            </div>
+            <div class="clearfix"> </div>
+        </div>
+    </div>
+    <div id="page-wrapper">
+        <div class="main-page">
+            <div class="four-grids">
+                <div class="col-md-3 four-grid">
+                    <div class="four-grid1">
+                        <div class="icon">
+                            <i class="glyphicon glyphicon-user" aria-hidden="true"></i>
+                        </div>
+                        <div class="four-text">
+                            <h3>Tổng số người dùng</h3>
+                            <h4> {{user_count}} </h4>
+                            <p> <span class="inlinebar">1,3,4,5,3,5</span> </p>
+                        </div>
+                        <a href="#" data-toggle="modal" data-target="#myModal1">Thông tin chi tiết</a>
+                    </div>
+                </div>
+                <div class="col-md-3 four-grid">
+                    <div class="four-grid2">
+                        <div class="icon">
+                            <i class="glyphicon glyphicon-pencil" aria-hidden="true"></i>
+                        </div>
+                        <div class="four-text">
+                            <h3>Tổng số người tạo sự kiện</h3>
+                            <h4>{{creator_count}}</h4>
+                            <p><span class="dynamicbar">Loading..</span></p>
+                        </div>
+                        <a href="#" data-toggle="modal" data-target="#myModal2">Thông tin chi tiết</a>
+                    </div>
+                </div>
+                <div class="col-md-3 four-grid">
+                    <div class="four-grid3">
+                        <div class="icon">
+                            <i class="glyphicon glyphicon-list-alt" aria-hidden="true"></i>
+                        </div>
+                        <div class="four-text">
+                            <h3>Tổng số sự kiện được tạo</h3>
+                            <h4>{{event_count}}</h4>
+                            <p> <span class="inlinebar">1,3,4,5,3,5</span> </p>
+                        </div>
+                        <a href="#" data-toggle="modal" data-target="#myModal3">Thông tin chi tiết</a>
+                    </div>
+                </div>
+                <div class="col-md-3 four-grid">
+                    <div class="four-grid4">
+                        <div class="icon">
+                            <i class="glyphicon glyphicon-download-alt" aria-hidden="true"></i>
+                        </div>
+                        <div class="four-text">
+                            <h3>Tổng số lượt tham gia các sự kiện</h3>
+                            <h4>{{join_count}}</h4>
+                            <p><span class="dynamicbar">Loading..</span></p>
+                        </div>
+                        <a href="#" data-toggle="modal" data-target="#myModal4">Thông tin chi tiết</a>
+                    </div>
+                </div>
+                <div class="clearfix"></div>
+            </div>
+        </div>
+        <div class="play-grid" style="height:600px; overflow-x:auto; ">
+            <h2 class="text-center"><b>DANH SÁCH NGƯỜI DÙNG</b></h2>
+            <br>
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>Email</th>
+                        <th>Tên</th>
+                        <th>Điện thoại</th>
+                        <th>Ngày sinh</th>
+                        <th>Loại tài khoản</th>
+                        <th>Mã QR</th>
+                        <th>Ảnh đại diện</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {{#each users}}
+                    <tr>
+                        <td>
+                            {{this.email}}
+                        </td>
+                        <td>
+                            {{this.name}}
+                        </td>
+                        <td>
+                            {{this.phone}}
+                        </td>
+                        <td>
+                            {{this.birthday}}
+                        </td>
+                        <td>
+                            {{this.type_user}}
+                        </td>
+                        <td>
+                            <img src="{{this.qrcode}}" class="show_qr">
+                        </td>
+                        <td>
+                            <img src="{{this.image}}" class="show_img">
+                        </td>
+                        <td><button href="#" class="hvr-icon-sink-away" data-toggle="modal"
+                                data-target="#remove{{this._id}}">Xóa</button></td>
+                    </tr>
+                    <div class="modal fade" id="remove{{this._id}}" tabindex="-1" role="dialog">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content modal-info">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                                            aria-hidden="true">&times;</span></button>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="more-grids">
+                                        <h3>Bạn có chắc muốn xóa {{this.name}} ?</h3>
+                                        <p>Nếu xác nhận xóa, người dùng sẽ không còn tồn tại trên hệ thống. Và người
+                                            dùng sẽ mất toàn bộ quyền truy cập vào ứng dụng
+                                        </p>
+                                        <a type="button" class="btn btn-success" href="/remove/{{this._id}}">Đồng ý</a>
+                                        <a type="button" class="btn btn-default" href="#" data-dismiss="modal">Huỷ</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {{/each}}
+                </tbody>
+            </table>
+        </div>
+        <div class="copy-section">
+            <p>&copy; 2019 Event - Check. Tạo và tham gia sự kiện đơn giản | Bản quyền của <a
+                    href="https://www.facebook.com/AdminThanhIT">StartUp 3N</a></p>
+        </div>
+    </div>
+</div>
+<script type="text/javascript" src="js/bootstrap.min.js"></script>
+<script src="js/jquery.nicescroll.js"></script>
+<script src="js/scripts.js"></script>
+<link href="css/bootstrap.min.css" rel="stylesheet">
+<div class="modal fade" id="myModal1" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content modal-info">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
+            </div>
+            <div class="modal-body">
+                <div class="more-grids">
+                    <h3>Tổng số người dùng</h3>
+                    <p>Đây là thống kê về tất cả người dùng trên hệ thống bao gồm: Người quản trị, Người tạo sự
+                        kiện, Người dùng thường (Người tham gia sự kiện)</p>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="myModal2" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content modal-info">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
+            </div>
+            <div class="modal-body">
+                <div class="more-grids">
+                    <h3>Tổng số người tạo sự kiện</h3>
+                    <p>Đây là thống kê về tất cả người dùng trên hệ thống được cấp phép cho tạo sự
+                        kiện</p>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="myModal3" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content modal-info">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
+            </div>
+            <div class="modal-body">
+                <div class="more-grids">
+                    <h3>Tổng số sự kiện được tạo</h3>
+                    <p>Đây là thống kê về tất cả sự kiện được tạo ra và lưu trữ trên
+                        hệ thống</p>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="myModal4" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content modal-info">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
+            </div>
+            <div class="modal-body">
+                <div class="more-grids">
+                    <h3>Tổng số lượt tham gia các sự kiện</h3>
+                    <p>Đây là thống kê về tất cả các lượt tham gia
+                        sự kiện của toàn bộ người dùng trên hệ thống
+                    </p>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
